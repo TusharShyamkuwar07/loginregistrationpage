@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <form>
+        <h1>Login</h1>
+        <div class="input-box">
+          <input type="email" placeholder="Email" required id="email" />
+          <div id="email_error" style="display: none">
+            Please Enter valid Email Including @ & "."
+          </div>
+
+          <i class="bx bxs-user"></i>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            required
+          />
+          <div id="password_error" style="display: none">
+            Please Enter Correct Password including 8 characters
+          </div>
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        <button type="button" class="btn" onclick="checkLogin()">Login</button>
+        <div class="register-link">
+          <p>
+            Don't have an account? <a href="registration.html">Register Here</a>
+          </p>
+        </div>
+      </form>
+    </div>
+    <script>
+      function checkLogin() {
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        let user_records = JSON.parse(localStorage.getItem("users")) || [];
+
+        if (
+          user_records.some((v) => {
+            return v.email === email && v.password === password;
+          })
+        ) {
+          alert("Login Successful");
+          let current_user = user_records.filter((v) => {
+            return v.email == email && v.password == password;
+          })[0];
+
+          localStorage.setItem("name", current_user.name);
+          localStorage.setItem("email", current_user.email);
+          window.location.href = "userdetails.html";
+        } else if (email.indexOf("@") === -1 || email.indexOf(".") == -1) {
+          document.getElementById("email_error").style.display = "block";
+          document.getElementById("password_error").style.display = "none";
+        } else if (password.length < 8) {
+          document.getElementById("email_error").style.display = "none";
+          document.getElementById("password_error").style.display = "block";
+        } else {
+          document.getElementById("password_error").style.display = "none";
+          document.getElementById("email_error").style.display = "none";
+          alert("Login Failed No User Found Please Register Yourself");
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          window.location.href = "registration.html";
+        }
+
+        window.addEventListener("popstate", function (event) {
+          history.pushState(null, null, window.location.href);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    <link rel="stylesheet" href="registration.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <form id="registrationForm">
+        <h1>Registration</h1>
+        <div class="input-box">
+          <input type="text" placeholder="Name" id="name" />
+          <i class="bx bxs-user"></i>
+          <div id="name_error" style="color: red; display: none">
+            Please Enter Your Name
+          </div>
+        </div>
+        <div class="input-box">
+          <input type="email" placeholder="Email" id="email" />
+          <i class="bx bx-envelope"></i>
+          <div id="email_error" style="color: red; display: none">
+            Email must include @ along with . dot
+          </div>
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Password" id="password" />
+          <i class="bx bxs-lock-alt"></i>
+          <div id="password_error" style="color: red; display: none">
+            Password must be at least 8 characters & contain letters, numbers,
+            and symbols
+          </div>
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder=" Confirm Password" id="confirm" />
+          <i class="bx bxs-lock-alt"></i>
+          <div
+            id="password_match"
+            style="color: rgb(26, 244, 81); display: none"
+          >
+            Password Matched
+          </div>
+
+          <div id="password_match1" style="color: red; display: none">
+            Password Not Matched
+          </div>
+        </div>
+
+        <button type="button" class="btn" onclick="savedata()"        
+        >Register</button>
+      </form>
+    </div>
+    <script>
+      function savedata() {
+        let name, email, password;
+        name = document.getElementById("name").value;
+        email = document.getElementById("email").value.toLowerCase();
+        password = document.getElementById("password").value;
+        confirmpassword = document.getElementById("confirm").value;
+
+        let user_records = JSON.parse(localStorage.getItem("users")) || [];
+
+        const emailError = document.getElementById("email_error");
+        // const emailError1 = document.getElementById("email_error1");
+
+        const passwordError = document.getElementById("password_error");
+        const nameerror = document.getElementById("name_error");
+
+        const password_match = document.getElementById("password_match");
+        const password_match1 = document.getElementById("password_match1");
+
+        const passwordRegex =
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (user_records.some((v) => v.email === email)) {
+          alert("Duplicate Data or User Already Found");
+          window.location.href = "index.html";
+        } else if (name.length < 3) {
+          nameerror.style.display = "block";
+          emailError.style.display = "none";
+          passwordError.style.display = "none";
+          password_match.style.display = "none";
+          password_match1.style.display = "none";
+        } else if (email.indexOf("@") === -1 || email.indexOf(".") == -1) {
+          nameerror.style.display = "none";
+          emailError.style.display = "block";
+          passwordError.style.display = "none";
+        } else if (!passwordRegex.test(password)) {
+          nameerror.style.display = "none";
+          emailError.style.display = "none";
+          passwordError.style.display = "block";
+        } else if (password === confirmpassword) {
+          nameerror.style.display = "none";
+          emailError.style.display = "none";
+          passwordError.style.display = "none";
+          password_match.style.display = "block";
+          password_match1.style.display = "none";
+          alert("Successfully Registered");
+          user_records.push({ name, email, password });
+          localStorage.setItem("users", JSON.stringify(user_records));
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          emailError.style.display = "none";
+          passwordError.style.display = "none";
+          window.location.href = "index.html";
+        } else if (password != confirmpassword) {
+          nameerror.style.display = "none";
+          emailError.style.display = "none";
+          passwordError.style.display = "none";
+          password_match.style.display = "none";
+          password_match1.style.display = "block";
+        }
+
+        document
+          .getElementById("registrationForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            savedata();
+          });
+      }
+    </script>
+  </body>
+</html>

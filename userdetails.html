@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+    <link rel="stylesheet" href="userdetail.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <form>
+        <h1>User Details</h1>
+        <div class="input-box">
+          <div class="innercontent">
+            <h5>Username :<span id="name"> </span></h5>
+            <i class="bx bxs-user"> </i>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <div class="innercontent">
+            <h5>Email :<span id="email"> </span></h5>
+            <i class="bx bx-envelope"> </i>
+          </div>
+        </div>
+
+        <button type="button" class="btn" onclick="logout()">LOGOUT</button>
+      </form>
+    </div>
+
+    <script>
+      let name = document.getElementById("name");
+      let Printedname = localStorage.getItem("name");
+      name.innerText = Printedname.toUpperCase();
+
+      let email = document.getElementById("email");
+      let Printedemail = localStorage.getItem("email");
+      email.innerText = Printedemail;
+
+      function logout() {
+        alert("Logout Successful");
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        window.location.href = "index.html";
+      }
+      window.onload = function () {
+        history.pushState(null, null, document.URL);
+        window.addEventListener("popstate", function () {
+          history.pushState(null, null, document.URL);
+        });
+      };
+
+      window.addEventListener("popstate", function (event) {
+        history.pushState(null, null, window.location.href);
+      });
+    </script>
+  </body>
+</html>
